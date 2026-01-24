@@ -12,21 +12,29 @@ interface FormData {
   complianceStandards: string;
 }
 
-interface Material {
-  name: string;
-  advantage: string;
-  performanceDelta: number;
-  properties?: {
-    tensileStrength?: number;
-    thermalResistance?: number;
-    costEfficiency?: number;
-    durability?: number;
-  };
-}
-
 interface ResultsData {
-  materials: Material[];
   summary?: string;
+  diagnostic?: string;
+  root_cause?: string;
+  selection_list?: string;
+  scientific_justification?: string;
+  profitability_analysis?: string;
+  safety_warning?: string;
+  comparison?: {
+    oldMaterial?: {
+      name: string;
+      density?: string;
+      operatingTemp?: string;
+      tensileStrength?: string;
+    };
+    newMaterial?: {
+      name: string;
+      density?: string;
+      operatingTemp?: string;
+      tensileStrength?: string;
+    };
+  };
+  [key: string]: unknown;
 }
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -62,25 +70,29 @@ export default function Index() {
         throw new Error("Failed to fetch analysis results");
       }
 
-      const data = await response.json();
+      const rawData = await response.json();
       
-      // Parse the response - adapt based on actual API response structure
+      // Handle array response (webhook returns array with single object)
+      const data = Array.isArray(rawData) ? rawData[0] : rawData;
+      
+      // Map the response directly - the webhook returns the exact structure we need
       const parsedData: ResultsData = {
-        materials: data.materials || data.recommendations || [
-          {
-            name: data.material_name || "Advanced Composite",
-            advantage: data.advantage || "Superior performance characteristics",
-            performanceDelta: data.performance_delta || 25,
-            properties: data.properties || {
-              tensileStrength: 85,
-              thermalResistance: 92,
-              costEfficiency: 78,
-              durability: 88,
-            },
-          },
-        ],
-        summary: data.summary || data.analysis_summary,
+        summary: data.summary,
+        diagnostic: data.diagnostic,
+        root_cause: data.root_cause,
+        selection_list: data.selection_list,
+        scientific_justification: data.scientific_justification,
+        profitability_analysis: data.profitability_analysis,
+        safety_warning: data.safety_warning,
+        comparison: data.comparison,
       };
+
+      // Add any additional unknown fields dynamically
+      Object.keys(data).forEach(key => {
+        if (!(key in parsedData)) {
+          parsedData[key] = data[key];
+        }
+      });
 
       setResultsData(parsedData);
       setStatus("success");
@@ -96,19 +108,18 @@ export default function Index() {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="border-b border-border/50 bg-card/30 backdrop-blur-md sticky top-0 z-50"
+        className="border-b border-border bg-card sticky top-0 z-50"
       >
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="absolute inset-0 bg-primary/30 rounded-lg blur-md" />
-              <div className="relative p-2 rounded-lg bg-primary/20 border border-primary/30">
+              <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
                 <Atom className="w-6 h-6 text-primary" />
               </div>
             </div>
             <div>
               <h1 className="text-xl font-bold text-foreground">
-                Material Science <span className="text-gradient">Innovation Lab</span>
+                Material Science <span className="text-primary">Innovation Lab</span>
               </h1>
               <p className="text-xs text-muted-foreground">
                 AI-Powered Material Problem Solver
@@ -138,12 +149,6 @@ export default function Index() {
           </div>
         </div>
       </main>
-
-      {/* Background Effects */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-glow-blue/5 rounded-full blur-3xl" />
-      </div>
     </div>
   );
 }

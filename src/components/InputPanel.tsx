@@ -70,7 +70,7 @@ export function InputPanel({ onSubmit, isLoading }: InputPanelProps) {
       className="glass-panel p-6 lg:p-8 h-full overflow-auto"
     >
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gradient mb-2">
+        <h2 className="text-2xl font-bold text-foreground mb-2">
           Material Analysis Parameters
         </h2>
         <p className="text-muted-foreground text-sm">
@@ -189,13 +189,13 @@ export function InputPanel({ onSubmit, isLoading }: InputPanelProps) {
 
         {/* Submit Button */}
         <div className="pt-4">
-          <button
+        <button
             type="submit"
             disabled={isLoading}
             className="w-full relative py-4 px-8 rounded-xl font-semibold text-lg 
-                       bg-gradient-to-r from-primary to-glow-blue text-primary-foreground
+                       bg-foreground text-background
                        glow-button disabled:opacity-50 disabled:cursor-not-allowed
-                       transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                       transition-all duration-300 hover:opacity-90 active:scale-[0.98]"
           >
             <span className="relative z-10 flex items-center justify-center gap-3">
               <Zap className="w-5 h-5" />
