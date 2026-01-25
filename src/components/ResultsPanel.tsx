@@ -10,9 +10,9 @@ import { RootCauseCard } from "./RootCauseCard";
 import { GenericResultCard } from "./GenericResultCard";
 import { SafetyWarningBadge } from "./SafetyWarningBadge";
 import { ComparisonTable } from "./ComparisonTable";
+import { QASection } from "./QASection";
 import { CheckCircle2, Download } from "lucide-react";
 import jsPDF from "jspdf";
-
 interface ResultsData {
   summary?: string;
   diagnostic?: string;
@@ -270,6 +270,9 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
                 index={7 + index}
               />
             ))}
+
+            {/* Q&A Section */}
+            <QASection resultsData={data} />
           </motion.div>
         )}
 

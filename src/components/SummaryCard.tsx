@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
+import { FormattedText } from "@/lib/formatScientificText";
 
 interface SummaryCardProps {
   content: string;
@@ -22,7 +23,7 @@ export function SummaryCard({ content, index }: SummaryCardProps) {
         <span>Analysis Summary</span>
       </div>
       <div className="text-sm text-foreground font-medium">
-        {cleanContent}
+        <FormattedText content={cleanContent} />
       </div>
     </motion.div>
   );
