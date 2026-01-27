@@ -41,32 +41,32 @@ export function ProcessingGauge({ isProcessing }: ProcessingGaugeProps) {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="flex flex-col items-center justify-center py-16"
+      className="flex flex-col items-center justify-center py-20 lg:py-28"
     >
       {/* Icon with scanning animation */}
-      <div className="relative mb-8">
-        <div className="w-20 h-20 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-          <Database className="w-10 h-10 text-primary" />
+      <div className="relative mb-10">
+        <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+          <Database className="w-14 h-14 lg:w-16 lg:h-16 text-primary" />
         </div>
         {/* Scanning line effect */}
         <div className="absolute inset-0 overflow-hidden rounded-2xl">
-          <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent scan-line" />
+          <div className="absolute inset-x-0 h-1.5 bg-gradient-to-r from-transparent via-primary to-transparent scan-line" />
         </div>
       </div>
 
       {/* Status Text */}
-      <div className="text-center mb-6">
-        <h3 className="text-lg font-semibold text-foreground mb-1">
+      <div className="text-center mb-8">
+        <h3 className="text-xl lg:text-2xl font-semibold text-foreground mb-2">
           Scanning Material Database...
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-base lg:text-lg text-muted-foreground">
           Analyzing molecular structures and properties
         </p>
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full max-w-sm mb-4">
-        <div className="h-2 bg-muted rounded-full overflow-hidden">
+      <div className="w-full max-w-md mb-6">
+        <div className="h-3 bg-muted rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-primary to-glow-blue rounded-full"
             initial={{ width: 0 }}
@@ -77,37 +77,37 @@ export function ProcessingGauge({ isProcessing }: ProcessingGaugeProps) {
       </div>
 
       {/* Timer */}
-      <div className="flex items-center gap-2 text-muted-foreground">
-        <span className="text-sm">Elapsed:</span>
-        <span className="font-mono text-sm font-medium text-foreground">
+      <div className="flex items-center gap-3 text-muted-foreground">
+        <span className="text-base">Elapsed:</span>
+        <span className="font-mono text-base lg:text-lg font-medium text-foreground">
           {formatTime(elapsedTime)}
         </span>
       </div>
 
       {/* Processing Steps */}
-      <div className="mt-8 space-y-2 text-sm text-muted-foreground">
+      <div className="mt-10 space-y-3 text-base text-muted-foreground">
         <motion.div
           initial={{ opacity: 0.5 }}
           animate={{ opacity: elapsedTime > 0 ? 1 : 0.5 }}
-          className="flex items-center gap-2"
+          className="flex items-center gap-3"
         >
-          <div className={`w-2 h-2 rounded-full ${elapsedTime > 0 ? 'bg-success' : 'bg-muted-foreground/30'}`} />
+          <div className={`w-3 h-3 rounded-full ${elapsedTime > 0 ? 'bg-success' : 'bg-muted-foreground/30'}`} />
           <span>Parsing input parameters</span>
         </motion.div>
         <motion.div
           initial={{ opacity: 0.5 }}
           animate={{ opacity: elapsedTime > 2 ? 1 : 0.5 }}
-          className="flex items-center gap-2"
+          className="flex items-center gap-3"
         >
-          <div className={`w-2 h-2 rounded-full ${elapsedTime > 2 ? 'bg-success' : 'bg-muted-foreground/30'}`} />
+          <div className={`w-3 h-3 rounded-full ${elapsedTime > 2 ? 'bg-success' : 'bg-muted-foreground/30'}`} />
           <span>Querying material properties database</span>
         </motion.div>
         <motion.div
           initial={{ opacity: 0.5 }}
           animate={{ opacity: elapsedTime > 5 ? 1 : 0.5 }}
-          className="flex items-center gap-2"
+          className="flex items-center gap-3"
         >
-          <div className={`w-2 h-2 rounded-full ${elapsedTime > 5 ? 'bg-primary' : 'bg-muted-foreground/30'} ${elapsedTime > 5 && progress < 95 ? 'animate-pulse' : ''}`} />
+          <div className={`w-3 h-3 rounded-full ${elapsedTime > 5 ? 'bg-primary' : 'bg-muted-foreground/30'} ${elapsedTime > 5 && progress < 95 ? 'animate-pulse' : ''}`} />
           <span>Running AI analysis engine</span>
         </motion.div>
       </div>
