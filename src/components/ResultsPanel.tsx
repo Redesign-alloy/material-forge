@@ -142,14 +142,14 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
-      className="glass-panel p-6 lg:p-8 h-full overflow-auto"
+      className="glass-panel p-8 lg:p-10 h-full overflow-auto"
     >
-      <div className="mb-6 flex items-start justify-between">
+      <div className="mb-8 flex items-start justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">
+          <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-3">
             Analysis Results
           </h2>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-base lg:text-lg">
             AI-powered material recommendations and technical analysis
           </p>
         </div>
@@ -159,11 +159,11 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             onClick={handleExportPDF}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium 
+            className="flex items-center gap-2 px-5 py-3 text-base font-medium 
                        bg-card border border-border rounded-lg 
                        hover:bg-muted transition-colors"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-5 h-5" />
             <span>Download Report</span>
           </motion.button>
         )}

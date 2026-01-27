@@ -8,9 +8,10 @@ interface TagInputProps {
   onTagsChange: (tags: string[]) => void;
   placeholder?: string;
   suggestions?: string[];
+  className?: string;
 }
 
-export function TagInput({ tags, onTagsChange, placeholder, suggestions = [] }: TagInputProps) {
+export function TagInput({ tags, onTagsChange, placeholder, suggestions = [], className }: TagInputProps) {
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -42,20 +43,20 @@ export function TagInput({ tags, onTagsChange, placeholder, suggestions = [] }: 
 
   return (
     <div className="relative">
-      <div className="input-field flex flex-wrap gap-2 p-2 min-h-[44px] rounded-lg border">
+      <div className={`input-field flex flex-wrap gap-2 p-3 min-h-[52px] lg:min-h-[60px] rounded-lg border ${className || ''}`}>
         {tags.map((tag) => (
           <Badge
             key={tag}
             variant="secondary"
-            className="bg-primary/20 text-primary border-primary/30 hover:bg-primary/30 transition-colors"
+            className="bg-primary/20 text-primary border-primary/30 hover:bg-primary/30 transition-colors text-sm lg:text-base px-3 py-1"
           >
             {tag}
             <button
               type="button"
               onClick={() => removeTag(tag)}
-              className="ml-1.5 hover:text-foreground transition-colors"
+              className="ml-2 hover:text-foreground transition-colors"
             >
-              <X className="h-3 w-3" />
+              <X className="h-4 w-4" />
             </button>
           </Badge>
         ))}
@@ -69,18 +70,18 @@ export function TagInput({ tags, onTagsChange, placeholder, suggestions = [] }: 
           onFocus={() => setShowSuggestions(true)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           placeholder={tags.length === 0 ? placeholder : "Add more..."}
-          className="flex-1 min-w-[120px] border-0 p-0 h-auto bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="flex-1 min-w-[140px] border-0 p-0 h-auto bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-base lg:text-lg"
         />
       </div>
       
       {showSuggestions && filteredSuggestions.length > 0 && inputValue && (
-        <div className="absolute z-10 w-full mt-1 glass-panel p-2 space-y-1 max-h-48 overflow-auto">
+        <div className="absolute z-10 w-full mt-2 glass-panel p-2 space-y-1 max-h-56 overflow-auto">
           {filteredSuggestions.map((suggestion) => (
             <button
               key={suggestion}
               type="button"
               onClick={() => addTag(suggestion)}
-              className="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-primary/20 hover:text-primary transition-colors"
+              className="w-full text-left px-4 py-3 rounded-md text-base hover:bg-primary/20 hover:text-primary transition-colors"
             >
               {suggestion}
             </button>

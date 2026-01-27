@@ -110,24 +110,24 @@ export default function Index() {
         animate={{ opacity: 1, y: 0 }}
         className="border-b border-border bg-card sticky top-0 z-50"
       >
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
+        <div className="max-w-[1920px] mx-auto px-6 lg:px-12 py-5">
+          <div className="flex items-center gap-4">
             <div className="relative">
-              <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                <Atom className="w-6 h-6 text-primary" />
+              <div className="p-3 rounded-xl bg-primary/10 border border-primary/20">
+                <Atom className="w-8 h-8 text-primary" />
               </div>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">
+              <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
                 Material Science <span className="text-primary">Innovation Lab</span>
               </h1>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm lg:text-base text-muted-foreground">
                 AI-Powered Material Problem Solver
               </p>
             </div>
-            <div className="ml-auto flex items-center gap-2">
-              <FlaskConical className="w-4 h-4 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground hidden sm:inline">
+            <div className="ml-auto flex items-center gap-3">
+              <FlaskConical className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm lg:text-base text-muted-foreground hidden sm:inline">
                 Enterprise Material Analysis
               </span>
             </div>
@@ -136,8 +136,8 @@ export default function Index() {
       </motion.header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 min-h-[calc(100vh-140px)]">
+      <main className="max-w-[1920px] mx-auto px-6 lg:px-12 py-8 lg:py-10">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 min-h-[calc(100vh-160px)]">
           {/* Left Panel - Input */}
           <div className="h-full">
             <InputPanel onSubmit={handleSubmit} isLoading={status === "loading"} />
