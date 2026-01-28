@@ -7,7 +7,7 @@ import { ScientificJustificationCard } from "./ScientificJustificationCard";
 import { ProfitabilityCard } from "./ProfitabilityCard";
 import { SummaryCard } from "./SummaryCard";
 import { RootCauseCard } from "./RootCauseCard";
-import { GenericResultCard } from "./GenericResultCard";
+import { DynamicResultCard } from "./DynamicDataRenderer";
 import { SafetyWarningBadge } from "./SafetyWarningBadge";
 import { ComparisonTable } from "./ComparisonTable";
 import { QASection } from "./QASection";
@@ -127,12 +127,12 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
     doc.save("material-analysis-report.pdf");
   };
 
-  // Get unknown fields for dynamic rendering
+  // Get unknown fields for dynamic rendering - handle any data type
   const getUnknownFields = () => {
     if (!data) return [];
     return Object.entries(data)
-      .filter(([key, value]) => !KNOWN_KEYS.includes(key) && typeof value === 'string')
-      .map(([key, value]) => ({ key, value: value as string }));
+      .filter(([key, value]) => !KNOWN_KEYS.includes(key) && value !== null && value !== undefined)
+      .map(([key, value]) => ({ key, value }));
   };
 
   const unknownFields = getUnknownFields();
@@ -261,13 +261,13 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
               <ProfitabilityCard content={data.profitability_analysis} index={6} />
             )}
 
-            {/* Dynamic Unknown Fields */}
-            {unknownFields.map((field, index) => (
-              <GenericResultCard 
+            {/* Dynamic Unknown Fields - handles any data type including objects, arrays, tables */}
+            {unknownFields.map((field, idx) => (
+              <DynamicResultCard 
                 key={field.key}
                 title={field.key}
-                content={field.value}
-                index={7 + index}
+                data={field.value}
+                index={7 + idx}
               />
             ))}
 
