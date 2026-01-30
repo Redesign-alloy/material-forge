@@ -17,8 +17,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { QuickTestScenarios } from "./QuickTestScenarios";
 
-interface FormData {
+export interface FormData {
   coreAsset: string;
   operationalContext: string;
   constraint: string;
@@ -44,14 +45,16 @@ const REQUIREMENT_SUGGESTIONS = [
   "Dimensional Stability",
 ];
 
+const EMPTY_FORM: FormData = {
+  coreAsset: "",
+  operationalContext: "",
+  constraint: "",
+  targetRequirements: [],
+  complianceStandards: "",
+};
+
 export function InputPanel({ onSubmit, isLoading }: InputPanelProps) {
-  const [formData, setFormData] = useState<FormData>({
-    coreAsset: "",
-    operationalContext: "",
-    constraint: "",
-    targetRequirements: [],
-    complianceStandards: "",
-  });
+  const [formData, setFormData] = useState<FormData>(EMPTY_FORM);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,21 +65,37 @@ export function InputPanel({ onSubmit, isLoading }: InputPanelProps) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleSelectScenario = (data: FormData) => {
+    setFormData(data);
+  };
+
+  const handleClearForm = () => {
+    setFormData(EMPTY_FORM);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="glass-panel p-8 lg:p-10 h-full overflow-auto"
+      className="h-full overflow-auto space-y-6"
     >
-      <div className="mb-10">
-        <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-3">
-          Material Analysis Parameters
-        </h2>
-        <p className="text-muted-foreground text-base lg:text-lg">
-          Define your engineering constraints for AI-powered material recommendations
-        </p>
-      </div>
+      {/* Quick Test Scenarios */}
+      <QuickTestScenarios 
+        onSelectScenario={handleSelectScenario}
+        onClearForm={handleClearForm}
+      />
+
+      {/* Main Form Panel */}
+      <div className="glass-panel p-8 lg:p-10">
+        <div className="mb-10">
+          <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-3">
+            Material Analysis Parameters
+          </h2>
+          <p className="text-muted-foreground text-base lg:text-lg">
+            Define your engineering constraints for AI-powered material recommendations
+          </p>
+        </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Core Asset */}
@@ -205,6 +224,7 @@ export function InputPanel({ onSubmit, isLoading }: InputPanelProps) {
           </button>
         </div>
       </form>
+      </div>
     </motion.div>
   );
 }
