@@ -11,8 +11,18 @@ import { DynamicResultCard } from "./DynamicDataRenderer";
 import { SafetyWarningBadge } from "./SafetyWarningBadge";
 import { ComparisonTable } from "./ComparisonTable";
 import { QASection } from "./QASection";
+import { DisplayDataRenderer } from "./DisplayDataRenderer";
 import { CheckCircle2, Download } from "lucide-react";
 import jsPDF from "jspdf";
+
+interface DisplayData {
+  recommended_material?: string;
+  comparison_table_markdown?: string;
+  confidence_score?: string;
+  detailed_report?: string;
+  [key: string]: unknown;
+}
+
 interface ResultsData {
   summary?: string;
   diagnostic?: string;
@@ -35,6 +45,9 @@ interface ResultsData {
       tensileStrength?: string;
     };
   };
+  display_data?: DisplayData;
+  success?: boolean;
+  timestamp?: string;
   [key: string]: unknown;
 }
 
@@ -52,7 +65,10 @@ const KNOWN_KEYS = [
   'scientific_justification',
   'profitability_analysis',
   'safety_warning',
-  'comparison'
+  'comparison',
+  'display_data',
+  'success',
+  'timestamp'
 ];
 
 export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
@@ -216,6 +232,11 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
                 </p>
               </div>
             </motion.div>
+
+            {/* Display Data Renderer - New structured format */}
+            {data.display_data && (
+              <DisplayDataRenderer data={data.display_data} index={0} />
+            )}
 
             {/* Safety Warning (if present) */}
             {data.safety_warning && (
