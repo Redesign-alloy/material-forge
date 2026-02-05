@@ -1,79 +1,83 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-/* Minimalist Industrial Design System - Light Theme */
+ @tailwind base;
+ @tailwind components;
+ @tailwind utilities;
+ 
+ @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+ 
+ /* Material Science Innovation Lab - Industrial Tech Design System */
 
 @layer base {
-  :root {
-    --background: 210 20% 98%;
-    --foreground: 215 25% 17%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 215 25% 17%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 17%;
-
-    --primary: 186 100% 42%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 210 16% 93%;
-    --secondary-foreground: 215 25% 27%;
-
-    --muted: 210 16% 96%;
-    --muted-foreground: 215 16% 47%;
-
-    --accent: 186 100% 42%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 214 20% 89%;
-    --input: 214 20% 92%;
-    --ring: 186 100% 42%;
-
-    --radius: 0.75rem;
-
-    /* Custom tokens */
-    --glow-cyan: 186 100% 42%;
-    --glow-blue: 210 100% 50%;
-    --glass-bg: 0 0% 100%;
-    --glass-border: 214 20% 85%;
-    --success: 160 84% 39%;
-    --warning: 38 92% 50%;
-    --slate-900: 215 25% 17%;
-    --slate-600: 215 16% 47%;
-    --slate-200: 214 20% 92%;
+   :root {
+     /* Deep Slate & Teal color scheme */
+     --background: 220 26% 14%;
+     --foreground: 210 40% 98%;
+ 
+     --card: 222 26% 17%;
+     --card-foreground: 210 40% 98%;
+ 
+     --popover: 222 26% 15%;
+     --popover-foreground: 210 40% 98%;
+ 
+     /* Primary Teal - #4FD1C5 */
+     --primary: 174 60% 56%;
+     --primary-foreground: 220 26% 14%;
+ 
+     --secondary: 220 20% 22%;
+     --secondary-foreground: 210 40% 90%;
+ 
+     --muted: 220 20% 20%;
+     --muted-foreground: 215 20% 55%;
+ 
+     --accent: 174 60% 56%;
+     --accent-foreground: 220 26% 14%;
+ 
+     --destructive: 0 72% 51%;
+     --destructive-foreground: 210 40% 98%;
+ 
+     --border: 220 20% 25%;
+     --input: 220 20% 20%;
+     --ring: 174 60% 56%;
+ 
+     --radius: 0.75rem;
+ 
+     /* Custom tokens */
+     --glow-cyan: 174 60% 56%;
+     --glow-blue: 210 100% 60%;
+     --glass-bg: 222 26% 18%;
+     --glass-border: 220 20% 28%;
+     --success: 160 84% 39%;
+     /* Amber warning - #F6AD55 */
+     --warning: 32 92% 65%;
+     --slate-900: 220 26% 14%;
+     --slate-600: 215 16% 47%;
+     --slate-200: 214 20% 92%;
   }
 
-  .dark {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 96%;
-    --card: 222 47% 8%;
-    --card-foreground: 210 40% 96%;
-    --popover: 222 47% 10%;
-    --popover-foreground: 210 40% 96%;
-    --primary: 186 100% 50%;
-    --primary-foreground: 222 47% 6%;
-    --secondary: 220 30% 15%;
-    --secondary-foreground: 210 40% 96%;
-    --muted: 220 25% 12%;
-    --muted-foreground: 215 20% 55%;
-    --accent: 186 100% 50%;
-    --accent-foreground: 222 47% 6%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 220 30% 18%;
-    --input: 220 30% 15%;
-    --ring: 186 100% 50%;
-    --glow-cyan: 186 100% 50%;
-    --glow-blue: 210 100% 60%;
-    --glass-bg: 222 47% 10%;
-    --glass-border: 220 30% 25%;
+   /* Light theme variant */
+   .light {
+     --background: 210 20% 98%;
+     --foreground: 220 26% 14%;
+     --card: 0 0% 100%;
+     --card-foreground: 220 26% 14%;
+     --popover: 0 0% 100%;
+     --popover-foreground: 220 26% 14%;
+     --primary: 174 60% 45%;
+     --primary-foreground: 0 0% 100%;
+     --secondary: 210 16% 93%;
+     --secondary-foreground: 220 26% 20%;
+     --muted: 210 16% 96%;
+     --muted-foreground: 215 16% 47%;
+     --accent: 174 60% 45%;
+     --accent-foreground: 0 0% 100%;
+     --destructive: 0 72% 51%;
+     --destructive-foreground: 0 0% 100%;
+     --border: 214 20% 89%;
+     --input: 214 20% 92%;
+     --ring: 174 60% 45%;
+     --glow-cyan: 174 60% 45%;
+     --glow-blue: 210 100% 50%;
+     --glass-bg: 0 0% 100%;
+     --glass-border: 214 20% 85%;
   }
 }
 
@@ -82,9 +86,14 @@
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+   body {
+     @apply bg-background text-foreground antialiased;
+     font-family: 'Inter', system-ui, sans-serif;
+   }
+ 
+   /* Monospace for data values */
+   .font-mono {
+     font-family: 'JetBrains Mono', 'Fira Code', monospace;
   }
 }
 
@@ -210,6 +219,25 @@
   }
 }
 
-.scan-line {
-  animation: scanLine 2s ease-in-out infinite;
-}
+ .scan-line {
+   animation: scanLine 2s ease-in-out infinite;
+ }
+ 
+ /* Metallic gradient utilities */
+ .metallic-gradient {
+   background: linear-gradient(
+     135deg,
+     hsl(220 26% 20%) 0%,
+     hsl(220 26% 25%) 50%,
+     hsl(220 26% 18%) 100%
+   );
+ }
+ 
+ .text-gradient-teal {
+   @apply bg-clip-text text-transparent;
+   background-image: linear-gradient(
+     135deg,
+     hsl(174 60% 56%),
+     hsl(174 60% 70%)
+   );
+ }
