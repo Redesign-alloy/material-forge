@@ -57,6 +57,13 @@
    const handleSubmit = async (formData: FormData) => {
      setStatus("loading");
      setError("");
+
+    try {
+    const payload = {
+      ...data,
+      user_id: user?.id,
+      email: user?.email
+    };
  
      try {
        const response = await fetch(
