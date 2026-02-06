@@ -67,13 +67,15 @@
            headers: {
              "Content-Type": "application/json",
            },
-           body: JSON.stringify({
-             coreAsset: formData.coreAsset,
-             operationalContext: formData.operationalContext,
-             currentFailure: formData.constraint,
-             requiredImprovements: formData.targetRequirements,
-             industryStandards: formData.complianceStandards,
-           }),
+            body: JSON.stringify({
+              coreAsset: formData.coreAsset,
+              operationalContext: formData.operationalContext,
+              currentFailure: formData.constraint,
+              requiredImprovements: formData.targetRequirements,
+              industryStandards: formData.complianceStandards,
+              user_id: user?.id,
+              email: user?.email,
+            }),
          }
        );
  
