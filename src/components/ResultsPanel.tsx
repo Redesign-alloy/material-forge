@@ -58,18 +58,19 @@ interface ResultsPanelProps {
 }
 
 const KNOWN_KEYS = [
-  'summary',
-  'diagnostic', 
-  'root_cause',
-  'selection_list',
-  'scientific_justification',
-  'profitability_analysis',
-  'safety_warning',
-  'comparison',
-  'display_data',
-  'success',
-  'timestamp'
+  'summary', 'diagnostic', 'root_cause', 'selection_list',
+  'scientific_justification', 'profitability_analysis', 'safety_warning',
+  'comparison', 'display_data', 'success', 'timestamp'
 ];
+
+const sectionVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.45, ease: "easeOut" as const },
+  }),
+};
 
 export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
   const handleExportPDF = () => {
@@ -82,49 +83,33 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
     const pageWidth = doc.internal.pageSize.getWidth();
     const maxWidth = pageWidth - margin * 2;
 
-    // Title
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
     doc.text("Technical Analysis Report", margin, yPosition);
     yPosition += 15;
 
-    // Date
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.text(`Generated: ${new Date().toLocaleDateString()}`, margin, yPosition);
     yPosition += 15;
 
     const addSection = (title: string, content: string) => {
-      // Check if we need a new page
-      if (yPosition > 250) {
-        doc.addPage();
-        yPosition = 20;
-      }
-
+      if (yPosition > 250) { doc.addPage(); yPosition = 20; }
       doc.setFontSize(12);
       doc.setFont("helvetica", "bold");
       doc.text(title, margin, yPosition);
       yPosition += 10;
-
       doc.setFontSize(9);
       doc.setFont("helvetica", "normal");
-      
-      // Split text into lines that fit the page width
       const lines = doc.splitTextToSize(content, maxWidth);
-      
       lines.forEach((line: string) => {
-        if (yPosition > 280) {
-          doc.addPage();
-          yPosition = 20;
-        }
+        if (yPosition > 280) { doc.addPage(); yPosition = 20; }
         doc.text(line, margin, yPosition);
         yPosition += lineHeight;
       });
-      
       yPosition += 10;
     };
 
-    // Add sections
     if (data.summary) addSection("Summary", data.summary.replace(/^#+\s*/gm, ''));
     if (data.diagnostic) addSection("Root Cause Diagnostic", data.diagnostic);
     if (data.root_cause) addSection("Root Cause Analysis", data.root_cause);
@@ -132,26 +117,20 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
     if (data.scientific_justification) addSection("Technical Deep-Dive", data.scientific_justification);
     if (data.profitability_analysis) addSection("Economic Impact", data.profitability_analysis);
 
-    // Add any additional unknown fields
     Object.entries(data).forEach(([key, value]) => {
       if (!KNOWN_KEYS.includes(key) && typeof value === 'string') {
-        const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        addSection(formattedKey, value);
+        addSection(key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), value);
       }
     });
 
     doc.save("material-analysis-report.pdf");
   };
 
-  // Get unknown fields for dynamic rendering - handle any data type
-  const getUnknownFields = () => {
-    if (!data) return [];
-    return Object.entries(data)
-      .filter(([key, value]) => !KNOWN_KEYS.includes(key) && value !== null && value !== undefined)
-      .map(([key, value]) => ({ key, value }));
-  };
-
-  const unknownFields = getUnknownFields();
+  const unknownFields = data
+    ? Object.entries(data)
+        .filter(([key, value]) => !KNOWN_KEYS.includes(key) && value !== null && value !== undefined)
+        .map(([key, value]) => ({ key, value }))
+    : [];
 
   return (
     <motion.div
@@ -187,23 +166,13 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
 
       <AnimatePresence mode="wait">
         {status === "idle" && (
-          <motion.div
-            key="idle"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+          <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <AwaitingPlaceholder />
           </motion.div>
         )}
 
         {status === "loading" && (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+          <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <ProcessingGauge isProcessing={true} />
           </motion.div>
         )}
@@ -216,93 +185,89 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
             exit={{ opacity: 0 }}
             className="space-y-6"
           >
-            {/* Success Header */}
+            {/* Success Header with pulse animation */}
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
+              variants={sectionVariants}
+              initial="hidden"
+              animate="visible"
+              custom={0}
               className="flex items-center gap-3 p-4 rounded-lg bg-success/10 border border-success/30"
             >
-              <CheckCircle2 className="w-5 h-5 text-success" />
+              <CheckCircle2 className="w-6 h-6 text-success pulse-check" />
               <div>
-                <p className="text-sm font-medium text-success">
-                  Analysis Complete
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Technical report generated successfully
-                </p>
+                <p className="text-sm font-semibold text-success">Analysis Complete</p>
+                <p className="text-xs text-muted-foreground">Technical report generated successfully</p>
               </div>
             </motion.div>
 
-            {/* Display Data Renderer - New structured format */}
             {data.display_data && (
-              <DisplayDataRenderer data={data.display_data} index={0} />
+              <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={1}>
+                <DisplayDataRenderer data={data.display_data} index={0} />
+              </motion.div>
             )}
 
-            {/* Safety Warning (if present) */}
             {data.safety_warning && (
-              <SafetyWarningBadge message={data.safety_warning} />
+              <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={2}>
+                <SafetyWarningBadge message={data.safety_warning} />
+              </motion.div>
             )}
 
-            {/* Summary Card */}
             {data.summary && (
-              <SummaryCard content={data.summary} index={0} />
+              <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={3}>
+                <SummaryCard content={data.summary} index={0} />
+              </motion.div>
             )}
 
-            {/* Diagnostic Card */}
             {data.diagnostic && (
-              <DiagnosticCard content={data.diagnostic} index={1} />
+              <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={4}>
+                <DiagnosticCard content={data.diagnostic} index={0} />
+              </motion.div>
             )}
 
-            {/* Root Cause Card */}
             {data.root_cause && (
-              <RootCauseCard content={data.root_cause} index={2} />
+              <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={5}>
+                <RootCauseCard content={data.root_cause} index={0} />
+              </motion.div>
             )}
 
-            {/* Comparison Table */}
             {data.comparison && (
-              <ComparisonTable 
-                oldMaterial={data.comparison.oldMaterial}
-                newMaterial={data.comparison.newMaterial}
-                index={3}
-              />
+              <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={6}>
+                <ComparisonTable oldMaterial={data.comparison.oldMaterial} newMaterial={data.comparison.newMaterial} index={0} />
+              </motion.div>
             )}
 
-            {/* Selection List Card */}
             {data.selection_list && (
-              <SelectionListCard content={data.selection_list} index={4} />
+              <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={7}>
+                <SelectionListCard content={data.selection_list} index={0} />
+              </motion.div>
             )}
 
-            {/* Scientific Justification */}
             {data.scientific_justification && (
-              <ScientificJustificationCard content={data.scientific_justification} index={5} />
+              <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={8}>
+                <ScientificJustificationCard content={data.scientific_justification} index={0} />
+              </motion.div>
             )}
 
-            {/* Profitability Analysis */}
             {data.profitability_analysis && (
-              <ProfitabilityCard content={data.profitability_analysis} index={6} />
+              <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={9}>
+                <ProfitabilityCard content={data.profitability_analysis} index={0} />
+              </motion.div>
             )}
 
-            {/* Dynamic Unknown Fields - handles any data type including objects, arrays, tables */}
             {unknownFields.map((field, idx) => (
-              <DynamicResultCard 
-                key={field.key}
-                title={field.key}
-                data={field.value}
-                index={7 + idx}
-              />
+              <motion.div key={field.key} variants={sectionVariants} initial="hidden" animate="visible" custom={10 + idx}>
+                <DynamicResultCard title={field.key} data={field.value} index={0} />
+              </motion.div>
             ))}
 
-            {/* Q&A Section */}
-            <QASection resultsData={data} />
+            <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={10 + unknownFields.length}>
+              <QASection resultsData={data} />
+            </motion.div>
           </motion.div>
         )}
 
         {status === "error" && (
-          <motion.div
-            key="error"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <motion.div key="error" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="flex flex-col items-center justify-center py-16"
           >
             <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/30 text-center">

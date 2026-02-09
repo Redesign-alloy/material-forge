@@ -7,11 +7,13 @@ import {
   AlertTriangle, 
   Target, 
   FileCheck,
-  Zap
+  Zap,
+  DollarSign
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { TagInput } from "@/components/ui/tag-input";
+import { Slider } from "@/components/ui/slider";
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +27,7 @@ export interface FormData {
   constraint: string;
   targetRequirements: string[];
   complianceStandards: string;
+  maxPriceIncrement: number;
 }
 
 interface InputPanelProps {
@@ -51,6 +54,7 @@ const EMPTY_FORM: FormData = {
   constraint: "",
   targetRequirements: [],
   complianceStandards: "",
+  maxPriceIncrement: 50,
 };
 
 export function InputPanel({ onSubmit, isLoading }: InputPanelProps) {
@@ -65,8 +69,8 @@ export function InputPanel({ onSubmit, isLoading }: InputPanelProps) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSelectScenario = (data: FormData) => {
-    setFormData(data);
+  const handleSelectScenario = (data: Omit<FormData, 'maxPriceIncrement'>) => {
+    setFormData({ ...data, maxPriceIncrement: formData.maxPriceIncrement });
   };
 
   const handleClearForm = () => {
@@ -80,13 +84,11 @@ export function InputPanel({ onSubmit, isLoading }: InputPanelProps) {
       transition={{ duration: 0.5 }}
       className="h-full overflow-auto space-y-6"
     >
-      {/* Quick Test Scenarios */}
       <QuickTestScenarios 
         onSelectScenario={handleSelectScenario}
         onClearForm={handleClearForm}
       />
 
-      {/* Main Form Panel */}
       <div className="glass-panel p-8 lg:p-10">
         <div className="mb-10">
           <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-3">
@@ -207,21 +209,72 @@ export function InputPanel({ onSubmit, isLoading }: InputPanelProps) {
           />
         </div>
 
+        {/* Economic Constraints - Max Price Increment */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <DollarSign className="w-5 h-5 text-primary" />
+            <label className="text-base lg:text-lg font-medium text-foreground">Economic Constraints</label>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="max-w-xs text-sm">Maximum allowable increase in material cost compared to the current failed material.</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+          <div className="space-y-3 bg-muted/30 border border-border rounded-lg p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Max Price Increment (%)</span>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  min={0}
+                  max={500}
+                  value={formData.maxPriceIncrement}
+                  onChange={(e) => {
+                    const val = Math.max(0, Math.min(500, Number(e.target.value) || 0));
+                    updateField("maxPriceIncrement", val);
+                  }}
+                  className="w-24 h-9 text-center font-mono text-sm input-field"
+                />
+                <span className="text-sm text-muted-foreground font-medium">%</span>
+              </div>
+            </div>
+            <Slider
+              value={[formData.maxPriceIncrement]}
+              onValueChange={(v) => updateField("maxPriceIncrement", v[0])}
+              min={0}
+              max={500}
+              step={5}
+              className="py-1"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>0%</span>
+              <span>100%</span>
+              <span>250%</span>
+              <span>500%+</span>
+            </div>
+          </div>
+        </div>
+
         {/* Submit Button */}
         <div className="pt-6">
-          <button
+          <motion.button
             type="submit"
             disabled={isLoading}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
             className="w-full relative py-5 px-10 rounded-xl font-bold text-lg lg:text-xl 
-                       bg-foreground text-background
-                       glow-button disabled:opacity-50 disabled:cursor-not-allowed
-                       transition-all duration-300 hover:opacity-90 active:scale-[0.98]"
+                       bg-gradient-to-r from-primary to-primary/80 text-primary-foreground
+                       disabled:opacity-50 disabled:cursor-not-allowed
+                       transition-shadow duration-300 hover:shadow-[0_0_30px_-5px_hsl(var(--primary)/0.4)]"
           >
             <span className="relative z-10 flex items-center justify-center gap-3">
               <Zap className="w-6 h-6" />
               {isLoading ? "Processing..." : "Unleash & Ignite"}
             </span>
-          </button>
+          </motion.button>
         </div>
       </form>
       </div>

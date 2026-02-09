@@ -6,13 +6,14 @@
  import { supabase } from "@/integrations/supabase/client";
  import { useToast } from "@/hooks/use-toast";
  
- interface FormData {
-   coreAsset: string;
-   operationalContext: string;
-   constraint: string;
-   targetRequirements: string[];
-   complianceStandards: string;
- }
+interface FormData {
+  coreAsset: string;
+  operationalContext: string;
+  constraint: string;
+  targetRequirements: string[];
+  complianceStandards: string;
+  maxPriceIncrement: number;
+}
  
  interface ResultsData {
    summary?: string;
@@ -67,15 +68,16 @@
            headers: {
              "Content-Type": "application/json",
            },
-            body: JSON.stringify({
-              coreAsset: formData.coreAsset,
-              operationalContext: formData.operationalContext,
-              currentFailure: formData.constraint,
-              requiredImprovements: formData.targetRequirements,
-              industryStandards: formData.complianceStandards,
-              user_id: user?.id,
-              email: user?.email,
-            }),
+             body: JSON.stringify({
+               coreAsset: formData.coreAsset,
+               operationalContext: formData.operationalContext,
+               currentFailure: formData.constraint,
+               requiredImprovements: formData.targetRequirements,
+               industryStandards: formData.complianceStandards,
+               maxPriceIncrement: formData.maxPriceIncrement,
+               user_id: user?.id,
+               email: user?.email,
+             }),
          }
        );
  

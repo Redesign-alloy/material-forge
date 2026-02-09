@@ -50,10 +50,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        glow: {
-          cyan: "hsl(var(--glow-cyan))",
-          blue: "hsl(var(--glow-blue))",
-        },
         glass: {
           bg: "hsl(var(--glass-bg))",
           border: "hsl(var(--glass-border))",
