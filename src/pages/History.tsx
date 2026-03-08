@@ -28,21 +28,15 @@
        if (!user?.id) return;
        
        try {
-         const { data, error } = await supabase.functions.invoke('external-db', {
-           body: {
-             action: 'select',
-             table: 'material_innovation_data',
-             filters: {
-               user_id: user.id,
-               orderBy: 'created_at',
-               ascending: false,
-             }
-           }
-         });
- 
-         if (error) throw error;
-         setItems(data?.data || []);
-         setFilteredItems(data?.data || []);
+          const { data, error } = await supabase
+            .from('material_innovation_data')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false });
+
+          if (error) throw error;
+          setItems(data || []);
+          setFilteredItems(data || []);
        } catch (err) {
          console.error('Failed to fetch history:', err);
        } finally {

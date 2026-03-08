@@ -94,26 +94,26 @@ export default function Dashboard() {
     if (!resultsData || !lastFormData || !user?.email) return;
 
     try {
-      await supabase.functions.invoke('external-db', {
-        body: {
-          action: 'insert',
-          table: 'material_innovation_data',
-          data: {
-            user_id: user.id,
-            grade_name: lastFormData.coreAsset,
-            redesign_data: resultsData,
-            created_at: new Date().toISOString(),
-          }
-        }
+      await supabase.from('material_innovation_data').insert({
+        user_id: user.id,
+        grade_name: lastFormData.coreAsset,
+        redesign_data: resultsData,
+        created_at: new Date().toISOString(),
       });
 
-      // Increment search count by 1 (5 credits deducted on usage page logic)
-      await supabase.functions.invoke('external-db', {
-        body: {
-          action: 'incrementSearchCount',
-          email: user.email,
-        }
-      });
+      // Increment search count
+      const { data: existingUser } = await supabase
+        .from('user_data')
+        .select('search_count')
+        .eq('email', user.email)
+        .single();
+
+      const currentCount = existingUser?.search_count || 0;
+      await supabase.from('user_data').upsert({
+        email: user.email,
+        search_count: currentCount + 1,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'email' });
 
       toast({
         title: "Project Saved",
