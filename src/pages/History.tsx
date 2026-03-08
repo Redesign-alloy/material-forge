@@ -35,8 +35,8 @@
             .order('created_at', { ascending: false });
 
           if (error) throw error;
-          setItems(data || []);
-          setFilteredItems(data || []);
+          setItems((data as any) || []);
+          setFilteredItems((data as any) || []);
        } catch (err) {
          console.error('Failed to fetch history:', err);
        } finally {

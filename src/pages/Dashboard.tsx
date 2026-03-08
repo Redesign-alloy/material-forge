@@ -94,12 +94,12 @@ export default function Dashboard() {
     if (!resultsData || !lastFormData || !user?.email) return;
 
     try {
-      await supabase.from('material_innovation_data').insert({
+      await supabase.from('material_innovation_data').insert([{
         user_id: user.id,
         grade_name: lastFormData.coreAsset,
-        redesign_data: resultsData,
+        redesign_data: resultsData as any,
         created_at: new Date().toISOString(),
-      });
+      }]);
 
       // Increment search count
       const { data: existingUser } = await supabase
