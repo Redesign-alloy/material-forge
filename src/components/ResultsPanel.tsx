@@ -12,7 +12,7 @@ import { SafetyWarningBadge } from "./SafetyWarningBadge";
 import { ComparisonTable } from "./ComparisonTable";
 import { QASection } from "./QASection";
 import { DisplayDataRenderer } from "./DisplayDataRenderer";
-import { CheckCircle2, Download } from "lucide-react";
+import { CheckCircle2, Download, Save, Plus } from "lucide-react";
 import jsPDF from "jspdf";
 
 interface DisplayData {
@@ -55,6 +55,8 @@ interface ResultsPanelProps {
   status: "idle" | "loading" | "success" | "error";
   data: ResultsData | null;
   error?: string;
+  onSaveProject?: () => void;
+  onNewProject?: () => void;
 }
 
 const KNOWN_KEYS = [
@@ -72,7 +74,7 @@ const sectionVariants = {
   }),
 };
 
-export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
+export function ResultsPanel({ status, data, error, onSaveProject, onNewProject }: ResultsPanelProps) {
   const handleExportPDF = () => {
     if (!data) return;
 
@@ -148,11 +150,46 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
             AI-powered material recommendations and technical analysis
           </p>
         </div>
-        
-        {status === "success" && data && (
+      </div>
+
+      {/* Action buttons when results are shown */}
+      {status === "success" && data && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-wrap items-center gap-3 mb-6"
+        >
+          {onSaveProject && (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onSaveProject}
+              className="flex items-center gap-2 px-5 py-3 text-base font-medium 
+                         bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-lg 
+                         hover:shadow-[0_0_20px_-5px_hsl(var(--primary)/0.4)] transition-shadow"
+            >
+              <Save className="w-5 h-5" />
+              <span>Save Project</span>
+            </motion.button>
+          )}
+          
+          {onNewProject && (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onNewProject}
+              className="flex items-center gap-2 px-5 py-3 text-base font-medium 
+                         bg-card border border-border rounded-lg 
+                         hover:bg-muted transition-colors"
+            >
+              <Plus className="w-5 h-5" />
+              <span>New Project</span>
+            </motion.button>
+          )}
+
           <motion.button
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={handleExportPDF}
             className="flex items-center gap-2 px-5 py-3 text-base font-medium 
                        bg-card border border-border rounded-lg 
@@ -161,8 +198,8 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
             <Download className="w-5 h-5" />
             <span>Download Report</span>
           </motion.button>
-        )}
-      </div>
+        </motion.div>
+      )}
 
       <AnimatePresence mode="wait">
         {status === "idle" && (
@@ -185,7 +222,7 @@ export function ResultsPanel({ status, data, error }: ResultsPanelProps) {
             exit={{ opacity: 0 }}
             className="space-y-6"
           >
-            {/* Success Header with pulse animation */}
+            {/* Success Header */}
             <motion.div
               variants={sectionVariants}
               initial="hidden"

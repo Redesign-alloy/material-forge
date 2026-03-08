@@ -85,13 +85,13 @@
            <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
              <HistoryIcon className="w-5 h-5 text-primary" />
            </div>
-           <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
-             Project History
-           </h1>
-         </div>
-         <p className="text-muted-foreground">
-           View and search your previous material analyses
-         </p>
+            <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
+              Saved Projects
+            </h1>
+          </div>
+          <p className="text-muted-foreground">
+            View and search your saved material analyses
+          </p>
        </motion.div>
  
        {/* Search Bar */}

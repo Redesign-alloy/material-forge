@@ -404,8 +404,8 @@ export function DisplayDataRenderer({ data, index = 0 }: DisplayDataRendererProp
           
           <div className="p-4 overflow-x-auto">
             <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900">
+              <thead className="sticky top-0 z-10">
+                <tr className="bg-secondary">
                   {headers.map((header, idx) => (
                     <motion.th 
                       key={idx}
@@ -413,9 +413,9 @@ export function DisplayDataRenderer({ data, index = 0 }: DisplayDataRendererProp
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 + idx * 0.05 }}
                       className={`
-                        px-4 py-3 text-left font-semibold text-foreground border-b-2 border-primary/20 whitespace-nowrap
-                        ${idx === 0 ? 'bg-primary/5' : ''}
-                        ${idx > 1 ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : ''}
+                        px-5 py-4 text-left font-bold text-foreground border-b-2 border-primary/30 whitespace-nowrap text-sm
+                        ${idx === 0 ? 'bg-primary/10' : ''}
+                        ${idx > 1 ? 'bg-success/5' : ''}
                       `}
                     >
                       <FormattedText content={header} />
@@ -439,9 +439,9 @@ export function DisplayDataRenderer({ data, index = 0 }: DisplayDataRendererProp
                       <td 
                         key={cellIdx} 
                         className={`
-                          px-4 py-3 border-b border-border/50
-                          ${cellIdx === 0 ? 'font-medium text-foreground bg-muted/30' : 'text-muted-foreground'}
-                          ${cellIdx > 1 ? 'bg-emerald-50/30 dark:bg-emerald-900/5' : ''}
+                          px-5 py-4 border-b border-border/50 text-sm
+                          ${cellIdx === 0 ? 'font-semibold text-foreground bg-muted/40' : 'text-secondary-foreground'}
+                          ${cellIdx > 1 ? 'bg-success/5' : ''}
                         `}
                       >
                         <FormattedText content={cell} />
