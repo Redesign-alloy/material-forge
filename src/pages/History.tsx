@@ -196,9 +196,15 @@
            </DialogHeader>
            <ScrollArea className="max-h-[calc(85vh-120px)]">
              <div className="p-6">
-               {selectedItem?.redesign_data && (
-                 <DisplayDataRenderer data={selectedItem.redesign_data as Record<string, unknown>} />
-               )}
+              {selectedItem?.redesign_data && (
+                  <DisplayDataRenderer 
+                    data={
+                      (selectedItem.redesign_data as Record<string, unknown>)?.display_data 
+                        ? (selectedItem.redesign_data as Record<string, unknown>).display_data as Record<string, unknown>
+                        : selectedItem.redesign_data as Record<string, unknown>
+                    } 
+                  />
+                )}
              </div>
            </ScrollArea>
          </DialogContent>
