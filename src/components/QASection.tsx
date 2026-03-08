@@ -174,7 +174,7 @@ export function QASection({ resultsData }: QASectionProps) {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://tejanaidu9.app.n8n.cloud/webhook/Q&A_overcome_limitation', {
+      const response = await fetch('https://tejanaidu7.app.n8n.cloud/webhook/Q&A_overcome_limitation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
