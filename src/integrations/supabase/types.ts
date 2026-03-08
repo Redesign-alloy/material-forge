@@ -14,7 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      material_innovation_data: {
+        Row: {
+          created_at: string
+          grade_name: string | null
+          id: string
+          redesign_data: Json | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          grade_name?: string | null
+          id?: string
+          redesign_data?: Json | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          grade_name?: string | null
+          id?: string
+          redesign_data?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_data: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          search_count: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          search_count?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          search_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
