@@ -18,7 +18,7 @@
  
  const navItems = [
    { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-   { title: 'Project History', url: '/history', icon: History },
+   { title: 'Saved Projects', url: '/history', icon: History },
    { title: 'Usage', url: '/usage', icon: BarChart3 },
    { title: 'Settings', url: '/settings', icon: Settings },
  ];
