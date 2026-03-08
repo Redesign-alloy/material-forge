@@ -17,20 +17,16 @@ export default function Usage() {
       if (!user?.email) return;
       
       try {
-        const { data, error } = await supabase.functions.invoke('external-db', {
-          body: {
-            action: 'select',
-            table: 'user_data',
-            filters: {
-              email: user.email,
-            }
-          }
-        });
+        const { data, error } = await supabase
+          .from('user_data')
+          .select('search_count')
+          .eq('email', user.email)
+          .single();
 
-        if (error) throw error;
+        if (error && error.code !== 'PGRST116') throw error;
         
-        if (data?.data && data.data.length > 0) {
-          setSearchCount(data.data[0].search_count || 0);
+        if (data) {
+          setSearchCount(data.search_count || 0);
         }
       } catch (err) {
         console.error('Failed to fetch usage:', err);
